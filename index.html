@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مختبر الحب - إصدار سبتمبر الفاخر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #020617;
+            --primary-pink: #ff2d55;
+            --gold-glow: #fbbf24;
+            --glass-white: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-deep);
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--text-main);
+            perspective: 1200px;
+        }
+
+        #nebula-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #020617 100%);
+        }
+
+        .main-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 45px;
+            width: 92%;
+            max-width: 440px;
+            height: 720px;
+            padding: 2.2rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .view-panel {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            text-align: center;
+        }
+
+        .view-panel.active { display: flex; }
+
+        .animate-text {
+            animation: textSlideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes textSlideUp {
+            from { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+
+        /* Countdown Grid */
+        .count-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 2rem 0;
+        }
+
+        .count-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.2rem 0.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .september-glow {
+            font-size: 5.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 30%, var(--primary-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(255, 45, 85, 0.4));
+        }
+
+        /* Wheel Styles */
+        .wheel-box {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 2rem auto;
+        }
+
+        #wheel-canvas {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 6px solid #fff;
+            box-shadow: 0 0 30px rgba(255, 45, 85, 0.3);
+            transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
+        }
+
+        .pointer-icon {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.8rem;
+            z-index: 10;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, #ff2d55 0%, #d91b42 100%);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 20px rgba(255, 45, 85, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-premium:hover { transform: scale(1.02); }
+
+        /* Final Text Box */
+        #typing-box {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            font-weight: 500;
+            color: #f1f5f9;
+            text-align: center; /* توسيط الكلام */
+            direction: rtl;
+            white-space: pre-wrap;
+            padding: 10px;
+        }
+
+        .avatar-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .avatar-box {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 18px;
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="nebula-bg"></div>
+
+    <div class="main-card">
+        
+        <!-- View 1: Countdown -->
+        <div id="view1" class="view-panel active">
+            <div class="mt-4 flex justify-center animate-bounce">
+                <span class="text-5xl">💍</span>
+            </div>
+            <h1 class="text-3xl font-black mt-6 animate-text">العد التنازلي لـ<br><span class="text-pink-500">حلم سبتمبر</span></h1>
+            
+            <div class="flex flex-col items-center my-6 animate-text delay-1">
+                <div class="september-glow">09</div>
+                <p class="text-lg font-bold text-yellow-500 tracking-widest mt-1">SEPTEMBER 2026</p>
+            </div>
+
+            <div class="count-grid animate-text delay-2" id="wedding-timer"></div>
+
+            <p class="text-slate-400 text-sm italic mt-auto px-6 leading-relaxed">
+                "كل ثانية تمضي هي خطوة أقرب لليوم الذي سنكون فيه معاً للأبد."
+            </p>
+            
+            <button onclick="changeView(2)" class="btn-premium mt-8">لنبدأ الرحلة 🎡</button>
+        </div>
+
+        <!-- View 2: Wheel -->
+        <div id="view2" class="view-panel">
+            <h2 class="text-2xl font-black mb-1 animate-text">عجلة هدايا العروسة</h2>
+            <p class="text-slate-400 text-sm mb-4 animate-text delay-1">دوري العجلة واكتشفي ما يخبئه لكِ سبتمبر</p>
+            
+            <div class="wheel-box animate-text delay-2">
+                <div class="pointer-icon">📍</div>
+                <canvas id="wheel-canvas"></canvas>
+            </div>
+
+            <div id="result-display" class="h-12 mt-4 font-bold text-pink-400 text-lg flex items-center justify-center"></div>
+            
+            <button id="spin-button" onclick="handleSpin()" class="btn-premium w-full mt-auto">اضغطي للدوران ✨</button>
+        </div>
+
+        <!-- View 3: Question -->
+        <div id="view3" class="view-panel items-center justify-center">
+            <div class="avatar-container animate-text">
+                <div class="avatar-box"><span class="text-5xl">🤵‍♂️</span></div>
+                <div class="text-3xl text-pink-500 animate-pulse">➕</div>
+                <div class="avatar-box"><span class="text-5xl">👰‍♀️</span></div>
+            </div>
+            <h2 class="text-2xl font-black mb-4">سؤال مصيري جداً..</h2>
+            <p class="text-slate-300 mb-10 text-lg leading-relaxed px-4">
+                هل تقبلين بأن تكوني ملكة قلبي، وشريكة حياتي، والمسيطرة على ريموت التلفزيون للأبد؟
+            </p>
+            
+            <div class="w-full space-y-4">
+                <button onclick="changeView(4)" class="w-full bg-emerald-500 py-4 rounded-2xl font-black text-xl shadow-lg">أوافق وبشدة! 🥰</button>
+                <button id="no-btn" onmouseover="teleportBtn()" class="w-full bg-white/5 py-3 rounded-2xl font-bold text-slate-400 border border-white/10">سأفكر بالأمر 🙄</button>
+            </div>
+        </div>
+
+        <!-- View 4: Vow -->
+        <div id="view4" class="view-panel">
+            <div class="flex justify-center mb-6 space-x-4 space-x-reverse">
+                <span class="text-6xl">🤵‍♂️</span>
+                <span class="text-4xl self-center text-pink-500">✨</span>
+                <span class="text-6xl">👰‍♀️</span>
+            </div>
+            <h2 class="text-2xl font-black text-pink-500 mb-6">وعد سبتمبر</h2>
+            
+            <div class="flex-1 bg-white/5 rounded-[35px] p-6 border border-white/10 flex items-center justify-center overflow-hidden relative">
+                <div id="typing-box"></div>
+            </div>
+
+            <button onclick="igniteHearts()" class="btn-premium mt-8">تثبيت الوعد للأبد ♾️</button>
+        </div>
+
+    </div>
+
+    <script>
+        function changeView(n) {
+            document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
+            document.getElementById('view' + n).classList.add('active');
+            if(n === 4) startFinalTyping();
+        }
+
+        function updateTimer() {
+            const targetDate = new Date('September 1, 2026 00:00:00').getTime();
+            const now = new Date().getTime();
+            const gap = targetDate - now;
+
+            const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
+            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), 
+                  m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
+
+            const timerContainer = document.getElementById('wedding-timer');
+            if (timerContainer) {
+                timerContainer.innerHTML = `
+                    <div class="count-item"><span class="text-2xl font-black">${d}</span><span class="text-[11px] text-slate-400">يوم</span></div>
+                    <div class="count-item"><span class="text-2xl font-black">${h}</span><span class="text-[11px] text-slate-400">ساعة</span></div>
+                    <div class="count-item"><span class="text-2xl font-black">${m}</span><span class="text-[11px] text-slate-400">دقيقة</span></div>
+                    <div class="count-item bg-pink-500/10 border-pink-500/30"><span class="text-2xl font-black text-pink-400">${s}</span><span class="text-[11px] text-pink-300">ثانية</span></div>
+                `;
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- WHEEL ---
+        const canvas = document.getElementById('wheel-canvas');
+        const ctx = canvas.getContext('2d');
+        const prizes = ["عشاء رومانسي", "هدية مفاجأة", "نزهة سعيدة", "باقة زهور", "يوم تدليل", "رحلة قصيرة"];
+        const colors = ["#ff2d55", "#fb7185", "#f43f5e", "#e11d48", "#be123c", "#9f1239"];
+        
+        function initWheel() {
+            const size = 300;
+            canvas.width = size; canvas.height = size;
+            const centerX = size / 2, centerY = size / 2, radius = size / 2;
+            const arc = (Math.PI * 2) / prizes.length;
+
+            for(let i=0; i<prizes.length; i++) {
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, i * arc, (i + 1) * arc);
+                ctx.fill();
+                ctx.strokeStyle = "rgba(255,255,255,0.1)";
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(i * arc + arc / 2);
+                ctx.textAlign = "center";
+                ctx.fillStyle = "white";
+                ctx.font = "bold 14px Tajawal";
+                // وضع النص في منتصف القطاع بشكل أفقي
+                ctx.fillText(prizes[i], radius * 0.6, 5);
+                ctx.restore();
+            }
+        }
+        initWheel();
+
+        let spinning = false;
+        function handleSpin() {
+            if(spinning) return;
+            spinning = true;
+            const extraDegrees = Math.floor(2000 + Math.random() * 2000);
+            canvas.style.transform = `rotate(${extraDegrees}deg)`;
+            document.getElementById('result-display').innerHTML = '<span class="animate-pulse">لحظة الحظ...</span>';
+            
+            setTimeout(() => {
+                spinning = false;
+                const actualRotation = extraDegrees % 360;
+                const prizeIndex = Math.floor(((360 - actualRotation + 270) % 360) / (360 / prizes.length)) % prizes.length;
+                document.getElementById('result-display').innerHTML = "✨ مبارك! كسبتِ: " + prizes[prizeIndex];
+                setTimeout(() => changeView(3), 2500);
+            }, 5000);
+        }
+
+        function teleportBtn() {
+            const btn = document.getElementById('no-btn');
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * 70 + 15 + 'vw';
+            btn.style.top = Math.random() * 70 + 15 + 'vh';
+            btn.innerText = "لا تحاولي! 😂";
+        }
+
+        function startFinalTyping() {
+            const text = "من هذه اللحظة وحتى سبتمبر 2026 ، ومن بعدها وحتى آخر يوم في عمري ، أعدكِ بأنكِ ستظلين دوماً الملكة المتربعة على عرش قلبي . سبتمبر ليس مجرد شهر ، بل هو التاريخ الذي سأبدأ فيه حياتي الحقيقية معكِ . أحبكِ أكثر من أي شيء في الوجود .";
+            const target = document.getElementById('typing-box');
+            let i = 0;
+            target.textContent = ""; 
+            function type() {
+                if(i < text.length) {
+                    target.textContent += text[i++];
+                    setTimeout(type, 45);
+                }
+            }
+            type();
+        }
+
+        function igniteHearts() {
+            for(let i=0; i<50; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.className = 'heart-particle text-3xl fixed pointer-events-none';
+                    h.style.animation = 'heartRise 3.5s ease-out forwards';
+                    h.innerHTML = ['❤️', '💖', '💍', '🤵‍♂️', '👰‍♀️'][Math.floor(Math.random()*5)];
+                    h.style.left = Math.random() * 100 + 'vw';
+                    h.style.bottom = '-50px';
+                    document.body.appendChild(h);
+                    setTimeout(() => h.remove(), 4000);
+                }, i * 100);
+            }
+        }
+    </script>
+    <style>
+        @keyframes heartRise {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</body>
+</html>
