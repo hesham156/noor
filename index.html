@@ -76,7 +76,6 @@
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
 
-        /* Countdown Grid */
         .count-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -104,7 +103,6 @@
             filter: drop-shadow(0 0 10px rgba(255, 45, 85, 0.4));
         }
 
-        /* Wheel Styles */
         .wheel-box {
             position: relative;
             width: 280px;
@@ -143,33 +141,40 @@
             cursor: pointer;
         }
 
-        .btn-premium:hover { transform: scale(1.02); }
-
-        /* Final Text Box */
         #typing-box {
-            font-size: 1.2rem;
-            line-height: 1.9;
+            font-size: 1.15rem;
+            line-height: 2.3; 
             font-weight: 500;
             color: #f1f5f9;
-            text-align: center; /* توسيط الكلام */
+            text-align: center;
             direction: rtl;
             white-space: pre-wrap;
-            padding: 10px;
+            padding: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .avatar-container {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
             align-items: center;
             margin-bottom: 1.5rem;
         }
         
         .avatar-box {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 18px;
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+            width: 85px;
+            height: 85px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -218,9 +223,9 @@
         <!-- View 3: Question -->
         <div id="view3" class="view-panel items-center justify-center">
             <div class="avatar-container animate-text">
-                <div class="avatar-box"><span class="text-5xl">🤵‍♂️</span></div>
+                <div class="avatar-box">👨‍⚕️</div>
                 <div class="text-3xl text-pink-500 animate-pulse">➕</div>
-                <div class="avatar-box"><span class="text-5xl">👰‍♀️</span></div>
+                <div class="avatar-box">👰‍♀️</div>
             </div>
             <h2 class="text-2xl font-black mb-4">سؤال مصيري جداً..</h2>
             <p class="text-slate-300 mb-10 text-lg leading-relaxed px-4">
@@ -235,27 +240,32 @@
 
         <!-- View 4: Vow -->
         <div id="view4" class="view-panel">
-            <div class="flex justify-center mb-6 space-x-4 space-x-reverse">
-                <span class="text-6xl">🤵‍♂️</span>
+            <div class="flex justify-center mb-6 space-x-6 space-x-reverse">
+                <div class="avatar-box" style="width:70px; height:70px; font-size: 2rem;">👰‍♀️</div>
                 <span class="text-4xl self-center text-pink-500">✨</span>
-                <span class="text-6xl">👰‍♀️</span>
+                <div class="avatar-box" style="width:70px; height:70px; font-size: 2rem;">👨‍⚕️</div>
             </div>
-            <h2 class="text-2xl font-black text-pink-500 mb-6">وعد سبتمبر</h2>
+            <h2 class="text-2xl font-black text-pink-500 mb-4">وعد سبتمبر</h2>
             
-            <div class="flex-1 bg-white/5 rounded-[35px] p-6 border border-white/10 flex items-center justify-center overflow-hidden relative">
+            <div class="flex-1 bg-white/5 rounded-[35px] border border-white/10 flex items-center justify-center overflow-hidden relative">
                 <div id="typing-box"></div>
             </div>
 
-            <button onclick="igniteHearts()" class="btn-premium mt-8">تثبيت الوعد للأبد ♾️</button>
+            <button onclick="igniteHearts()" class="btn-premium mt-6">تثبيت الوعد للأبد ♾️</button>
         </div>
 
     </div>
 
     <script>
+        let typingStarted = false;
+        let wheelSpun = false;
+
         function changeView(n) {
             document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
             document.getElementById('view' + n).classList.add('active');
-            if(n === 4) startFinalTyping();
+            if(n === 4 && !typingStarted) {
+                startFinalTyping();
+            }
         }
 
         function updateTimer() {
@@ -307,23 +317,22 @@
                 ctx.textAlign = "center";
                 ctx.fillStyle = "white";
                 ctx.font = "bold 14px Tajawal";
-                // وضع النص في منتصف القطاع بشكل أفقي
-                ctx.fillText(prizes[i], radius * 0.6, 5);
+                ctx.fillText(prizes[i], radius * 0.65, 5);
                 ctx.restore();
             }
         }
         initWheel();
 
-        let spinning = false;
         function handleSpin() {
-            if(spinning) return;
-            spinning = true;
+            if(wheelSpun) return;
+            wheelSpun = true;
+            document.getElementById('spin-button').disabled = true;
+            
             const extraDegrees = Math.floor(2000 + Math.random() * 2000);
             canvas.style.transform = `rotate(${extraDegrees}deg)`;
-            document.getElementById('result-display').innerHTML = '<span class="animate-pulse">لحظة الحظ...</span>';
+            document.getElementById('result-display').innerHTML = '<span class="animate-pulse">جاري اختيار حظكِ...</span>';
             
             setTimeout(() => {
-                spinning = false;
                 const actualRotation = extraDegrees % 360;
                 const prizeIndex = Math.floor(((360 - actualRotation + 270) % 360) / (360 / prizes.length)) % prizes.length;
                 document.getElementById('result-display').innerHTML = "✨ مبارك! كسبتِ: " + prizes[prizeIndex];
@@ -334,12 +343,13 @@
         function teleportBtn() {
             const btn = document.getElementById('no-btn');
             btn.style.position = 'fixed';
-            btn.style.left = Math.random() * 70 + 15 + 'vw';
-            btn.style.top = Math.random() * 70 + 15 + 'vh';
+            btn.style.left = Math.random() * 60 + 20 + 'vw';
+            btn.style.top = Math.random() * 60 + 20 + 'vh';
             btn.innerText = "لا تحاولي! 😂";
         }
 
         function startFinalTyping() {
+            typingStarted = true;
             const text = "من هذه اللحظة وحتى سبتمبر 2026 ، ومن بعدها وحتى آخر يوم في عمري ، أعدكِ بأنكِ ستظلين دوماً الملكة المتربعة على عرش قلبي . سبتمبر ليس مجرد شهر ، بل هو التاريخ الذي سأبدأ فيه حياتي الحقيقية معكِ . أحبكِ أكثر من أي شيء في الوجود .";
             const target = document.getElementById('typing-box');
             let i = 0;
@@ -347,24 +357,24 @@
             function type() {
                 if(i < text.length) {
                     target.textContent += text[i++];
-                    setTimeout(type, 45);
+                    setTimeout(type, 50);
                 }
             }
             type();
         }
 
         function igniteHearts() {
-            for(let i=0; i<50; i++) {
+            for(let i=0; i<60; i++) {
                 setTimeout(() => {
                     const h = document.createElement('div');
-                    h.className = 'heart-particle text-3xl fixed pointer-events-none';
+                    h.className = 'fixed pointer-events-none text-3xl';
                     h.style.animation = 'heartRise 3.5s ease-out forwards';
-                    h.innerHTML = ['❤️', '💖', '💍', '🤵‍♂️', '👰‍♀️'][Math.floor(Math.random()*5)];
+                    h.innerHTML = ['❤️', '💖', '💍', '🤵‍♂️', '👰‍♀️', '✨'][Math.floor(Math.random()*6)];
                     h.style.left = Math.random() * 100 + 'vw';
                     h.style.bottom = '-50px';
                     document.body.appendChild(h);
                     setTimeout(() => h.remove(), 4000);
-                }, i * 100);
+                }, i * 80);
             }
         }
     </script>
@@ -372,7 +382,7 @@
         @keyframes heartRise {
             0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
             20% { opacity: 1; }
-            100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(-110vh) scale(1.8) rotate(360deg); opacity: 0; }
         }
     </style>
 </body>
